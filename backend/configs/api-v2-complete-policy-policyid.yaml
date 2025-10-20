@@ -1,51 +1,68 @@
-version: '1.0'
 endpoint:
-  v2_path: /api/v2/complete-policy/{policyId}
   v2_method: GET
+  v2_path: /api/v2/complete-policy/{policyId}
+field_mappings:
+- approved: false
+  edited: false
+  source: getPolicy_v1
+  stub_type: null
+  stub_value: null
+  transform: null
+  v1_path: .policy_num
+  v2_path: .policyNumber
+- approved: false
+  edited: false
+  source: getBeneficiaries_v1
+  stub_type: null
+  stub_value: null
+  transform: "[\n  {% for item in source %}\n    { \"name\": \"{{ item.beneficiary_name\
+    \ }}\", \"relationship\": \"{{ item.relation }}\" }\n  {% if not loop.last %},{%\
+    \ endif %}\n  {% endfor %}\n]\n"
+  v1_path: null
+  v2_path: .beneficiaries
+- approved: false
+  edited: true
+  source: getPolicy_v1
+  stub_type: null
+  stub_value: null
+  v1_path: .policy_status
+  v2_path: .policyStatus
+- approved: false
+  edited: false
+  source: getCoverage_v1
+  stub_type: null
+  stub_value: null
+  transform: null
+  v1_path: .amount
+  v2_path: .coverageAmount
+metadata:
+  ambiguous_mappings: null
+  confidence_score: 0.98
+  generated_at: '2023-10-05T14:48:00Z'
+  generator_version: 0.1.0
 v1_calls:
-- name: getPolicy_v1
-  endpoint: /api/v1/policy/{id}
+- endpoint: /api/v1/policy/{id}
   method: GET
+  name: getPolicy_v1
   params:
     path:
-    - v2_param: policyId
+    - location: path
       v1_param: id
-      location: path
-- name: getCoverage_v1
-  endpoint: /api/v1/coverage
+      v2_param: policyId
+- endpoint: /api/v1/coverage
   method: GET
+  name: getCoverage_v1
   params:
     query:
-    - v2_param: policyId
+    - location: path
       v1_param: policy_id
-      location: path
-- name: getBeneficiaries_v1
-  endpoint: /api/v1/beneficiaries
+      v2_param: policyId
+- endpoint: /api/v1/beneficiaries
   method: GET
+  name: getBeneficiaries_v1
   params:
     query:
-    - v2_param: policyId
+    - location: path
       v1_param: policy_id
-      location: path
-field_mappings:
-- v2_path: .policyNumber
-  source: getPolicy_v1
-  v1_path: .policy_num
-- v2_path: .beneficiaries
-  source: getBeneficiaries_v1
-  v1_path: null
-  transform: "[\n  {% for item in source %}\n    {\n      \"name\": \"{{ item.beneficiary_name\
-    \ }}\",\n      \"relationship\": \"{{ item.relation }}\"\n    }{%- if not loop.last\
-    \ -%},{%- endif %}\n  {% endfor %}\n]\n"
-- v2_path: .policyStatus
-  source: getPolicy_v1
-  v1_path: .policy_status
-- v2_path: .coverageAmount
-  source: getCoverage_v1
-  v1_path: .amount
-- v2_path: .coverageType
-  source: getCoverage_v1
-  v1_path: .type
-metadata:
-  generated_at: '2023-10-05T14:00:00Z'
-  confidence_score: 0.95
+      v2_param: policyId
+version: '1.0'

@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional
 from jinja2 import Environment, StrictUndefined, TemplateSyntaxError, UndefinedError
 from jinja2.sandbox import SandboxedEnvironment
+import json
 import logging
 
 logger = logging.getLogger(__name__)
@@ -72,6 +73,19 @@ class FieldTransformer:
         """Attempt to coerce string results to appropriate types"""
         if not isinstance(value, str):
             return value
+
+        # Strip whitespace
+        value = value.strip()
+
+        # Try to parse as JSON if it looks like JSON (starts with { or [)
+        if value and (value[0] in '{['):
+            try:
+                parsed = json.loads(value)
+                logger.debug(f"Successfully parsed JSON: {value[:100]} -> {parsed}")
+                return parsed
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.debug(f"Failed to parse as JSON: {value[:100]}, error: {e}")
+                pass
 
         # Try int
         try:
