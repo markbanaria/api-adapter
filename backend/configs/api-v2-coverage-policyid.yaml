@@ -1,0 +1,47 @@
+version: '1.0'
+endpoint:
+  v2_path: /api/v2/coverage/{policyId}
+  v2_method: GET
+v1_calls:
+- name: getPolicy_v1
+  endpoint: /api/v1/policy/{id}
+  method: GET
+  params:
+    path:
+    - v2_param: policyId
+      v1_param: id
+      location: path
+- name: getCoverage_v1
+  endpoint: /api/v1/coverage
+  method: GET
+  params:
+    query:
+    - v2_param: policyId
+      v1_param: policy_id
+      location: path
+- name: getBeneficiaries_v1
+  endpoint: /api/v1/beneficiaries
+  method: GET
+  params:
+    query:
+    - v2_param: policyId
+      v1_param: policy_id
+      location: path
+field_mappings:
+- v2_path: .policyNumber
+  source: getPolicy_v1
+  v1_path: .policy_num
+- v2_path: .coverageDetails
+  source: getCoverage_v1
+  v1_path: null
+  transform: "[\n  {% for item in source %}\n    { \"amount\": \"{{ item.amount }}\"\
+    , \"type\": \"{{ item.type }}\" },\n  {% endfor %}\n]\n"
+- v2_path: .beneficiaries
+  source: getBeneficiaries_v1
+  v1_path: null
+  transform: "[\n  {% for item in source %}\n    { \"name\": \"{{ item.beneficiary_name\
+    \ }}\", \"relationship\": \"{{ item.relation }}\" },\n  {% endfor %}\n]\n"
+metadata:
+  generated_at: '2023-10-15T14:48:00Z'
+  confidence_score: 0.9
+  ambiguous_mappings: []

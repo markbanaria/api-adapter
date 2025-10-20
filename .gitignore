@@ -28,7 +28,7 @@ out/
 Thumbs.db
 
 # Project specific
-backend/configs/*.yaml
-!backend/configs/example.yaml
+# backend/configs/*.yaml  # Commenting out to include config files in repo
+# !backend/configs/example.yaml
 config-generator/specs/*.json
 !config-generator/specs/example-*.json
