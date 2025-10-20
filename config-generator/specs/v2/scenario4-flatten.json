@@ -1,0 +1,40 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Policy Summary API V2",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/v2/policy-summary/{policyId}": {
+      "get": {
+        "operationId": "getPolicySummary",
+        "parameters": [
+          {
+            "name": "policyId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Flattened policy summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "policyNumber": {"type": "string"},
+                    "policyType": {"type": "string"},
+                    "premium": {"type": "number"},
+                    "insuredName": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

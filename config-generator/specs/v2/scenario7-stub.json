@@ -1,0 +1,48 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Enhanced Policy API V2",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/v2/enhanced-policy/{policyId}": {
+      "get": {
+        "operationId": "getEnhancedPolicy",
+        "parameters": [
+          {
+            "name": "policyId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Enhanced policy with digital features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "policyNumber": {"type": "string"},
+                    "status": {"type": "string"},
+                    "digitalSignatureUrl": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "URL to digital signature (not available in V1)"
+                    },
+                    "mobileAppDeepLink": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Deep link to mobile app (not available in V1)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

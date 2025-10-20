@@ -1,0 +1,44 @@
+version: '1.0'
+endpoint:
+  v2_path: /api/v2/policies/{policyId}
+  v2_method: GET
+v1_calls:
+- name: get_policy_details
+  endpoint: /api/v1/policy/{policy_num}
+  method: GET
+  params:
+    path:
+    - v2_param: policyId
+      v1_param: policy_num
+      location: path
+field_mappings:
+- v2_path: policyNumber
+  source: get_policy_details
+  v1_path: policy_num
+- v2_path: status
+  source: get_policy_details
+  v1_path: policy_status
+- v2_path: insuredName
+  source: get_policy_details
+  transform: '{{ get_policy_details.first_name }} {{ get_policy_details.last_name
+    }}'
+- v2_path: coverage.amount
+  source: get_policy_details
+  v1_path: coverage_amount
+- v2_path: coverage.type
+  source: get_policy_details
+  v1_path: coverage_type
+- v2_path: digitalSignatureUrl
+  source: stub
+  stub_value: null
+  stub_type: 'null'
+metadata:
+  confidence_score: 0.92
+  ambiguous_mappings:
+  - v2_field: beneficiaries
+    proposals:
+    - v1_field: beneficiary_list
+      confidence: 0.75
+    - v1_field: nominees
+      confidence: 0.25
+  generated_at: '2025-10-19T23:45:50.804121'

@@ -1,0 +1,49 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Complete Policy API V2",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/v2/complete-policy/{policyId}": {
+      "get": {
+        "operationId": "getCompletePolicy",
+        "parameters": [
+          {
+            "name": "policyId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Complete policy with coverage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "policyNumber": {"type": "string"},
+                    "status": {"type": "string"},
+                    "coverageAmount": {"type": "number"},
+                    "beneficiaries": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {"type": "string"},
+                          "relationship": {"type": "string"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

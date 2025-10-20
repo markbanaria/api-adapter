@@ -1,0 +1,39 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Coverage API V2",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/v2/coverage/{policyId}": {
+      "get": {
+        "operationId": "getCoverage",
+        "parameters": [
+          {
+            "name": "policyId",
+            "in": "path",
+            "required": true,
+            "schema": {"type": "string"},
+            "description": "Policy identifier"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coverage details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "coverageAmount": {"type": "number"},
+                    "coverageType": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+version: '1.0'
+endpoint:
+  v2_path: /api/v2/complete-policy/{policyId}
+  v2_method: GET
+v1_calls:
+- name: getPolicy_v1
+  endpoint: /api/v1/policy/{id}
+  method: GET
+  params:
+    path:
+    - v2_param: policyId
+      v1_param: id
+      location: path
+- name: getCoverage_v1
+  endpoint: /api/v1/coverage
+  method: GET
+  params:
+    query:
+    - v2_param: policyId
+      v1_param: policy_id
+      location: path
+- name: getBeneficiaries_v1
+  endpoint: /api/v1/beneficiaries
+  method: GET
+  params:
+    query:
+    - v2_param: policyId
+      v1_param: policy_id
+      location: path
+field_mappings:
+- v2_path: .policyNumber
+  source: getPolicy_v1
+  v1_path: .policy_num
+- v2_path: .customer.firstName
+  source: getPolicy_v1
+  v1_path: .first_name
+- v2_path: .customer.lastName
+  source: getPolicy_v1
+  v1_path: .last_name
+- v2_path: .customer.customerAge
+  source: getPolicy_v1
+  v1_path: .customer_age
+- v2_path: .customer.emailAddress
+  source: getPolicy_v1
+  v1_path: .email_address
+- v2_path: .policy.policyStatus
+  source: getPolicy_v1
+  v1_path: .policy_status
+- v2_path: .policy.policyType
+  source: getPolicy_v1
+  v1_path: .policy_type
+- v2_path: .policy.premiumAmount
+  source: getPolicy_v1
+  v1_path: .premium_amount
+- v2_path: .coverage.amount
+  source: getCoverage_v1
+  v1_path: .amount
+- v2_path: .coverage.type
+  source: getCoverage_v1
+  v1_path: .type
+- v2_path: .beneficiaries
+  source: getBeneficiaries_v1
+  v1_path: null
+  transform: "[\n  {% for item in source %}\n  {\n    \"name\": \"{{ item.beneficiary_name\
+    \ }}\",\n    \"relationship\": \"{{ item.relation }}\"\n  }{%- if not loop.last\
+    \ -%},{%- endif %}\n  {% endfor %}\n]\n"
+metadata:
+  generated_at: 2023-10-04 15:00:00+00:00
+  confidence_score: 0.95
